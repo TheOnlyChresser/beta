@@ -129,6 +129,30 @@
       white-space: nowrap;
     }
 
+    /* Knap styling */
+    .button-container {
+      margin-top: 30px;
+    }
+    .try-button {
+      display: inline-block;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: #4285F4;
+      border: 2px solid;
+      border-image-slice: 1;
+      border-image-source: linear-gradient(45deg, #4285F4, #34A853);
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+    .try-button:hover {
+      background: linear-gradient(45deg, #4285F4, #34A853);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(66, 133, 244, 0.7);
+      transform: translateY(-2px);
+    }
+
     /* Responsivt design */
     @media screen and (max-width: 768px) {
       .topbar {
@@ -150,7 +174,7 @@
       }
       h2 {
         font-size: 3vw;
-        margin-top: -8vh;
+        margin-top: -4vh;
       }
       .language-menu {
         width: 140px;
@@ -165,6 +189,10 @@
       .language-dropdown img {
         width: 18px;
       }
+      .try-button {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+      }
     }
 
     @media screen and (max-width: 480px) {
@@ -173,7 +201,6 @@
       }
       h2 {
         font-size: 4vw;
-        margin-top: -10vh;
       }
       .language-menu {
         width: 120px;
@@ -185,6 +212,10 @@
       .language-selected img,
       .language-dropdown img {
         width: 16px;
+      }
+      .try-button {
+        padding: 8px 20px;
+        font-size: 0.8rem;
       }
     }
   </style>
@@ -225,6 +256,11 @@
     The most reliable tool to find the perfect career
     <span class="line-break">for you - your personal AI career guider</span>
   </h2>
+
+  <!-- Knap Container -->
+  <div class="button-container">
+    <a href="chat.html" class="try-button">Try now</a>
+  </div>
 
   <script>
     // Funktion til at åbne/lukke sprog-dropdown
