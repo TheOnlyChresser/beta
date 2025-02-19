@@ -135,18 +135,23 @@
     }
     .try-button {
       display: inline-block;
+      border-radius: 30px;
+      padding: 2px; /* Bestemmer tykkelsen af gradient-rammen */
+      background: linear-gradient(45deg, #4285F4, #34A853);
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .try-button span {
+      display: block;
+      border-radius: 28px; /* 2px mindre end den ydre for at passe inden i rammen */
+      background: #fff;
       padding: 12px 30px;
       font-size: 1rem;
       font-weight: bold;
-      text-decoration: none;
       color: #4285F4;
-      border: 2px solid;
-      border-image-slice: 1;
-      border-image-source: linear-gradient(45deg, #4285F4, #34A853);
-      border-radius: 30px;
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
-    .try-button:hover {
+    .try-button:hover span {
       background: linear-gradient(45deg, #4285F4, #34A853);
       color: #fff;
       box-shadow: 0 0 15px rgba(66, 133, 244, 0.7);
@@ -189,7 +194,7 @@
       .language-dropdown img {
         width: 18px;
       }
-      .try-button {
+      .try-button span {
         padding: 10px 25px;
         font-size: 0.9rem;
       }
@@ -213,7 +218,7 @@
       .language-dropdown img {
         width: 16px;
       }
-      .try-button {
+      .try-button span {
         padding: 8px 20px;
         font-size: 0.8rem;
       }
@@ -258,9 +263,11 @@
   </h2>
 
   <!-- Knap Container -->
-  <div class="button-container">
-    <a href="chat.html" class="try-button">Try now</a>
-  </div>
+    <div class="button-container">
+      <a href="chat.html" class="try-button">
+        <span>Try now</span>
+      </a>
+    </div>
 
   <script>
     // Funktion til at åbne/lukke sprog-dropdown
