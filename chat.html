@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <!-- Google Fonts: Syne (til topbaren) og Roboto (til AI-boksen) -->
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <title>Careerpilot</title>
+  <title>AI Chat</title>
   <style>
     * {
       margin: 0;
@@ -22,7 +24,7 @@
       height: 100vh;
       padding-top: 60px;
       overflow-y: auto;
-      background-color: #eeeeee;
+      background-color: #fff;
     }
     /* Topbar og sprog-menu styling */
     .topbar {
@@ -73,7 +75,7 @@
     .ai {
       align-self: flex-start;
     }
-    /* AI-boks: hvid, med Inter, fast max bredde og dynamisk højde */
+    /* AI-boks: hvid, med Roboto, fast max bredde og dynamisk højde */
     .ai.initial {
       max-width: 620px;
       width: auto;
@@ -140,6 +142,7 @@
       font-family: 'Inter';
       padding: 12px;
       padding-bottom: 50px;
+      background-color: #fff;
       border: 1.5px solid #ddd;
       border-radius: 20px;
       outline: none;
@@ -148,6 +151,7 @@
       min-height: 200px;
       max-height: 300px;
       overflow-y: auto;
+      box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.01) 0px 9px 9px 0px, rgba(0, 0, 0, 0.06) 0px 2px 5px 0px;
     }
     .action-buttons {
       position: absolute;
@@ -171,10 +175,10 @@
       padding: 10px 15px;
       font-size: 15px;
       cursor: pointer;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .action-button:hover {
-      background-image: linear-gradient(45deg, #4285F4, #34A853);
+      background-image: linear-gradient(45deg, #4285F4, #34A853), linear-gradient(45deg, #4285F4, #34A853);
       color: #fff;
     }
     .send-button {
