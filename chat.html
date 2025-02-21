@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <!-- Google Font "Syne" -->
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Syne (til topbaren) og Roboto (til AI-boksen) -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>AI Chat</title>
   <style>
     * {
@@ -14,15 +17,14 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      font-family: Arial, sans-serif;
+      font-family: Helvetica, Arial, sans-serif;
       display: flex;
       justify-content: center;
-      align-items: center;
       height: 100vh;
       padding-top: 60px;
       overflow-y: auto;
+      background-color: #eeeeee;
     }
     /* Topbar og sprog-menu styling */
     .topbar {
@@ -31,19 +33,10 @@
       left: 0;
       width: 100%;
       height: 60px;
-      background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: flex;
       align-items: center;
       padding: 0 20px;
       z-index: 1000;
-    }
-    .logo {
-      height: 40px;
-      width: 40px;
-      background: url('https://via.placeholder.com/40') no-repeat center center;
-      background-size: cover;
-      margin-right: 10px;
     }
     .brand {
       font-family: 'Syne', sans-serif;
@@ -51,90 +44,23 @@
       font-size: 24px;
       color: #000;
     }
-    .language-menu {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      width: 160px;
-      border: 1px solid #ccc;
-      font-family: sans-serif;
-      user-select: none;
-      z-index: 1001;
-    }
-    .language-selected {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      padding: 10px;
-      cursor: pointer;
-    }
-    .language-selected:hover {
-      color: #777;
-    }
-    .language-selected img {
-      width: 20px;
-      height: 10px;
-      margin-right: 8px;
-    }
-    .language-dropdown {
-      display: none;
-      background-color: #fff;
-      border: none;
-    }
-    .language-menu.open .language-selected {
-      background-color: #f0f0f0;
-    }
-    .language-dropdown div {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      cursor: pointer;
-    }
-    .language-dropdown div:hover {
-      color: #777;
-    }
-    .language-dropdown img {
-      width: 20px;
-      height: 15px;
-      margin-right: 8px;
-    }
     .chat-container {
       width: 100%;
-      height: 80vh;
+      height: 0vh;
       display: flex;
       flex-direction: column;
+      margin: 0 auto;
       overflow-y: visible;
     }
     .chat-box {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 15px;
-      margin-left: 5%;
-      margin-right: 5%;
+      margin: 0 auto;
+      padding-top: 15px;
+      padding-bottom: 5vh;
       overflow-y: visible;
-    }
-    /* Fade-overlay øverst (lige under topbaren) */
-    .fade-overlay-top {
-      position: fixed;
-      top: 60px; /* Lige under topbaren (som er 60px høj) */
-      left: 0;
-      width: 100%;
-      height: 40px; /* Juster højden på fade-effekten efter behov */
-      background: linear-gradient(to top, transparent, #ffffff);
-      pointer-events: none;
-      z-index: 999; /* Sørg for, at den ligger over chat-beskederne */
-    }
-    /* Fade-overlay forneden (lige over inputfeltet) */
-    .fade-overlay-bottom {
-      position: fixed;
-      bottom: 110px; /* Juster dette, så det ligger lige over input-containeren */
-      left: 0;
-      width: 100%;
-      height: 40px; /* Juster højden efter behov */
-      background: linear-gradient(to bottom, transparent, #ffffff);
-      pointer-events: none;
-      z-index: 999;
+      width: 50%;
     }
     .message {
       max-width: 75%;
@@ -146,38 +72,28 @@
       position: relative;
       display: inline-block;
     }
-    .user {
-      align-self: flex-end;
-      border: 2px solid transparent;
-      padding: 15px;
-      border-radius: 20px;
-      background-image:
-        linear-gradient(white, white), linear-gradient(to right, #ff7eb3, #ff758c);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
-    }
     .ai {
       align-self: flex-start;
-      border: 2px solid transparent;
+    }
+    /* AI-boks: hvid, med Roboto, fast max bredde og dynamisk højde */
+    .ai.initial {
+      max-width: 620px;
+      width: auto;
+      /*background-color: white; */
+      font-family: 'Inter';
+      font-size:x-large;
+      font-weight: 600;
       padding: 15px;
       border-radius: 20px;
-      background-image:
-        linear-gradient(white, white), linear-gradient(to right, cyan, lime);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
+      /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);*/
+      overflow-y: auto;
+      max-height: 30vh;
     }
+    /* Typing-animation */
     .typing-indicator {
-      align-self: flex-start;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 25px;
-      border-radius: 20px;
-      background: white;
-      border: 2px solid;
-      border-image: linear-gradient(90deg, #6a85ff, #5ac8fa) 1;
-      padding: 5px 10px;
     }
     .dot {
       width: 6px;
@@ -195,33 +111,78 @@
       50% { opacity: 1; transform: translateY(-3px); }
       100% { opacity: 0.3; transform: translateY(0px); }
     }
-    /* Ændringer til input-container og send-knap */
+    /* Input-container og send-knap styling */
     .input-container {
-      position: relative; /* For at kunne placere knappen absolut */
+      position: relative;
       margin: 0 auto;
-      background-color: #fff;
-      width: 75%;
+      width: 50%;
       padding: 10px;
       display: flex;
       align-items: center;
       z-index: 10;
     }
+    .skip-button {
+      position: absolute;
+      right: 80px;
+      bottom: 15px;
+      background-color: transparent;
+      border: 1px solid #000;
+      border-radius: 20px;
+      padding: 10px 15px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .skip-button:hover {
+      background-color: #000;
+      color: #fff;
+    }
     .input-field {
       flex-grow: 1;
+      font-family: 'Inter';
       padding: 12px;
-      border: 1px solid #ddd;
+      padding-bottom: 50px;
+      border: 1.5px solid #ddd;
       border-radius: 20px;
       outline: none;
       font-size: 15px;
       resize: none;
-      min-height: 20px;
-      max-height: 100px;
+      min-height: 200px;
+      max-height: 300px;
       overflow-y: auto;
+    }
+    .action-buttons {
+      position: absolute;
+      left: 50%;
+      bottom: 15px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      transition: left 0.3s ease, transform 0.3s ease;
+    }
+    .input-container.with-send .action-buttons {
+      left: 15px;
+      transform: translateX(0);
+    }
+    .action-button {
+      border: double 1.5px transparent;
+      background-image: linear-gradient(white, white), linear-gradient(45deg, #4285F4, #34A853);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      border-radius: 20px;
+      padding: 10px 15px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .action-button:hover {
+      background-image: linear-gradient(45deg, #4285F4, #34A853);
+      color: #fff;
     }
     .send-button {
       position: absolute;
-      right: -50px;
-      bottom: 20px;
+      right: 15px;
+      bottom: 15px;
       background-color: #000;
       border: none;
       color: white;
@@ -232,23 +193,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Start med knappen skjult (skaleret ned) */
       transform: scale(0);
       transition: transform 0.05s ease-out;
     }
     .send-button:hover {
-      background-color: #545453;
+      background-image: linear-gradient(45deg, #4285F4, #34A853);
     }
-    /* Klassen 'active' skalerer knappen til fuld størrelse */
     .send-button.active {
       transform: scale(1);
     }
-    /* Disabled state - evt. for at dæmpe klik */
     .send-button.disabled {
-      opacity: 0.5;
+      background-color: #545453;
       pointer-events: none;
     }
-
     @media screen and (max-width: 600px) {
       .chat-container {
         height: 90vh;
@@ -258,80 +215,53 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="logo"></div>
     <span class="brand">Careerpilot</span>
   </div>
-  <!-- Sprog-menu -->
-  <div class="language-menu">
-    <div class="language-selected" onclick="toggleDropdown()">
-      <img id="selected-flag" src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="English">
-      <span id="selected-text">English</span>
-      <span class="material-icons" id="dropdown-arrow">expand_less</span>
-    </div>
-    <div class="language-dropdown" id="language-dropdown">
-      <div onclick="changeLanguage('da')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg" alt="Dansk">
-        <span>Dansk</span>
-      </div>
-    </div>
-  </div>
+
   <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
     <div class="input-container">
       <textarea class="input-field" id="userInput" placeholder="Vent på AI..." disabled></textarea>
-      <!-- Skift knapikonet til at bruge Material Icons -->
+      <div class="action-buttons" id="actionButtons">
+        <button class="action-button" id="skipButton" onclick="skipQuestion()">Skip spørgsmål</button>
+        <button class="action-button" id="endButton" onclick="endChat()">Afslut</button>
+      </div>
       <button class="send-button disabled" id="sendButton" onclick="sendMessage()">
         <span class="material-icons">arrow_upward</span>
       </button>
     </div>
   </div>
-  <div class="fade-overlay-top"></div>
-  <div class="fade-overlay-bottom"></div>
 
   <script>
     const chatBox = document.getElementById("chatBox");
     const userInput = document.getElementById("userInput");
     const sendButton = document.getElementById("sendButton");
-    let typingIndicator;  
+    let aiMessageBox = null;  // Den faste AI-boks
 
-    function appendMessage(text, sender) {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("message", sender);
-      messageDiv.innerText = text;
-      chatBox.appendChild(messageDiv);
+    // Funktion til at opdatere AI-boksen
+    function setAIMessage(content) {
+      if (!aiMessageBox) {
+        aiMessageBox = document.createElement("div");
+        aiMessageBox.classList.add("message", "ai", "initial");
+        chatBox.appendChild(aiMessageBox);
+      }
+      aiMessageBox.innerHTML = content;
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function showTypingIndicator() {
-      if (!document.getElementById("typingIndicator")) {
-        typingIndicator = document.createElement("div");
-        typingIndicator.classList.add("typing-indicator");
-        typingIndicator.id = "typingIndicator";
-        typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-        chatBox.appendChild(typingIndicator);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    }
-
-    function removeTypingIndicator() {
-      if (typingIndicator) {
-        typingIndicator.remove();
-        typingIndicator = null;
-      }
-    }
-
+    // Send beskeden til webhooken uden at vise brugerens besked i chatten
     function sendMessage() {
       const message = userInput.value.trim();
       if (message === "") return;
 
-      appendMessage(message, "user");
       userInput.value = "";
       userInput.placeholder = "Vent på AI...";
       userInput.disabled = true;
       sendButton.classList.add("disabled");
       sendButton.classList.remove("active");
 
-      showTypingIndicator();
+      // Vis typing-animation i AI-boksen
+      setAIMessage('<div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>');
 
       fetch("https://hook.integromat.com/YOUR_MAKE_WEBHOOK", {
         method: "POST",
@@ -340,33 +270,33 @@
       })
       .then(response => response.json())
       .then(data => {
-        removeTypingIndicator();
-        appendMessage(data.reply, "ai");
+        // Opdater AI-boksen med svaret fra webhook
+        setAIMessage(data.reply);
         userInput.placeholder = "Skriv en besked...";
         userInput.disabled = false;
-        // Efter respons kan du tjekke inputfeltet igen
         checkInput();
       })
       .catch(error => {
-        removeTypingIndicator();
+        // Ved fejl logges fejlen til konsollen, men der vises ikke en fejlbesked i AI-boksen
         console.error("Fejl:", error);
       });
     }
 
-    // Funktion til at tjekke input og animere send-knappen
+    // Opdater send-knappen baseret på inputfeltets indhold
     function checkInput() {
+      const inputContainer = document.querySelector('.input-container');
       if (userInput.value.trim().length > 0) {
         sendButton.classList.add("active");
         sendButton.classList.remove("disabled");
+        inputContainer.classList.add('with-send');
       } else {
         sendButton.classList.remove("active");
         sendButton.classList.add("disabled");
+        inputContainer.classList.remove('with-send');
       }
     }
-
-    // Lyt til input-eventet for at udløse animationen
+    
     userInput.addEventListener("input", checkInput);
-
     userInput.addEventListener("keydown", function(event) {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
@@ -374,13 +304,25 @@
       }
     });
 
+    // Ved opstart oprettes AI-boksen med den indledende besked
     setTimeout(() => {
-      appendMessage("Hej, kan du starte med at introducere dig selv?", "ai");
+      aiMessageBox = document.createElement("div");
+      aiMessageBox.classList.add("message", "ai", "initial");
+      aiMessageBox.innerText = "Hej, kan du starte med at introducere dig selv?";
+      chatBox.appendChild(aiMessageBox);
+      chatBox.scrollTop = chatBox.scrollHeight;
       userInput.placeholder = "Skriv en besked...";
       userInput.disabled = false;
-      // Tjek inputfeltet ved opstart
       checkInput();
     }, 500);
+
+    // Eksempel på funktioner for 'Skip spørgsmål' og 'Afslut'
+    function skipQuestion() {
+      console.log("Spørgsmål sprunget over.");
+    }
+    function endChat() {
+      console.log("Chat afsluttet.");
+    }
   </script>
 </body>
 </html>
