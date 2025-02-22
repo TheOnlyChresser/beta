@@ -8,8 +8,8 @@
   <!-- Google Fonts: Syne (til topbaren) og Roboto (til AI-boksen) -->
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>AI Chat</title>
   <style>
     * {
@@ -26,7 +26,7 @@
       overflow-y: auto;
       background-color: #fff;
     }
-    /* Topbar og sprog-menu styling */
+    /* Topbar styling */
     .topbar {
       position: fixed;
       top: 0;
@@ -46,11 +46,12 @@
     }
     .chat-container {
       width: 100%;
-      height: 0vh;
+      height: 90vh;
       display: flex;
       flex-direction: column;
       margin: 0 auto;
-      overflow-y: visible;
+      overflow-y: auto;
+      padding: 0 10px;
     }
     .chat-box {
       flex: 1;
@@ -59,7 +60,7 @@
       margin: 0 auto;
       padding-top: 15px;
       padding-bottom: 5vh;
-      overflow-y: visible;
+      overflow-y: auto;
       width: 50%;
     }
     .message {
@@ -75,17 +76,15 @@
     .ai {
       align-self: flex-start;
     }
-    /* AI-boks: hvid, med Roboto, fast max bredde og dynamisk højde */
+    /* AI-boks styling */
     .ai.initial {
       max-width: 620px;
       width: auto;
-      /*background-color: white; */
       font-family: 'Inter';
-      font-size:x-large;
+      font-size: x-large;
       font-weight: 600;
       padding: 15px;
       border-radius: 20px;
-      /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);*/
       overflow-y: auto;
       max-height: 30vh;
     }
@@ -140,7 +139,9 @@
     .input-field {
       flex-grow: 1;
       font-family: 'Inter';
-      padding: 12px;
+      padding-left: 12px;
+      padding-top: 12px;
+      padding-right: 50px;
       padding-bottom: 50px;
       background-color: #fff;
       border: 1.5px solid #ddd;
@@ -150,7 +151,7 @@
       resize: none;
       min-height: 40vh;
       max-height: 50vh;
-      overflow-y: auto;
+      overflow-y: visible;
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.01) 0px 9px 9px 0px, rgba(0, 0, 0, 0.06) 0px 2px 5px 0px;
     }
     .action-buttons {
@@ -165,6 +166,17 @@
     .input-container.with-send .action-buttons {
       left: 15px;
       transform: translateX(0);
+    }
+    .input{
+      width: 100%;
+      height: 30vh;
+      font-family: 'Inter';
+      border: none;
+      outline: none;
+      padding-right: 0;
+      resize: none;
+      overflow-y: auto;
+      font-size: 15px;
     }
     .action-button {
       border: double 1.5px transparent;
@@ -208,9 +220,56 @@
       background-color: #545453;
       pointer-events: none;
     }
-    @media screen and (max-width: 600px) {
+
+    /* Responsivitet til mindre skærme */
+    @media screen and (max-width: 1200px) {
+      .chat-box, .input-container {
+        width: 80%;
+      }
+    }
+    @media screen and (max-width: 768px) {
+      .chat-box, .input-container {
+        width: 90%;
+      }
+      .brand {
+        font-size: 20px;
+      }
+      .input-field {
+        min-height: 35vh;
+        max-height: 45vh;
+      }
+    }
+    @media screen and (max-width: 480px) {
       .chat-container {
-        height: 90vh;
+        height: 85vh;
+      }
+      .topbar {
+        padding: 0 10px;
+      }
+      .brand {
+        font-size: 18px;
+      }
+      .action-button, .skip-button {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      .send-button {
+        padding: 8px;
+        font-size: 16px;
+      }
+    }
+    
+    /* Ændring: På computere placeres input-containeren midt på skærmen */
+    @media screen and (min-width: 1200px) {
+      .chat-container {
+        position: relative;
+      }
+      .input-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
       }
     }
   </style>
@@ -223,10 +282,12 @@
   <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
     <div class="input-container">
-      <textarea class="input-field" id="userInput" placeholder="Vent på AI..." disabled></textarea>
-      <div class="action-buttons" id="actionButtons">
-        <button class="action-button" id="skipButton" onclick="skipQuestion()">Skip spørgsmål</button>
-        <button class="action-button" id="endButton" onclick="endChat()">Afslut</button>
+      <div class="input-field">
+        <textarea class="input" id="userInput" placeholder="Vent på AI..." disabled></textarea>
+        <div class="action-buttons" id="actionButtons">
+          <button class="action-button" id="skipButton" onclick="skipQuestion()">Skip spørgsmål</button>
+          <button class="action-button" id="endButton" onclick="endChat()">Afslut</button>
+        </div>
       </div>
       <button class="send-button disabled" id="sendButton" onclick="sendMessage()">
         <span class="material-icons">arrow_upward</span>
@@ -238,9 +299,8 @@
     const chatBox = document.getElementById("chatBox");
     const userInput = document.getElementById("userInput");
     const sendButton = document.getElementById("sendButton");
-    let aiMessageBox = null;  // Den faste AI-boks
+    let aiMessageBox = null;
 
-    // Funktion til at opdatere AI-boksen
     function setAIMessage(content) {
       if (!aiMessageBox) {
         aiMessageBox = document.createElement("div");
@@ -251,7 +311,6 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Send beskeden til webhooken uden at vise brugerens besked i chatten
     function sendMessage() {
       const message = userInput.value.trim();
       if (message === "") return;
@@ -262,7 +321,6 @@
       sendButton.classList.add("disabled");
       sendButton.classList.remove("active");
 
-      // Vis typing-animation i AI-boksen
       setAIMessage('<div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>');
 
       fetch("https://hook.integromat.com/YOUR_MAKE_WEBHOOK", {
@@ -272,19 +330,16 @@
       })
       .then(response => response.json())
       .then(data => {
-        // Opdater AI-boksen med svaret fra webhook
         setAIMessage(data.reply);
         userInput.placeholder = "Skriv en besked...";
         userInput.disabled = false;
         checkInput();
       })
       .catch(error => {
-        // Ved fejl logges fejlen til konsollen, men der vises ikke en fejlbesked i AI-boksen
         console.error("Fejl:", error);
       });
     }
 
-    // Opdater send-knappen baseret på inputfeltets indhold
     function checkInput() {
       const inputContainer = document.querySelector('.input-container');
       if (userInput.value.trim().length > 0) {
@@ -306,7 +361,6 @@
       }
     });
 
-    // Ved opstart oprettes AI-boksen med den indledende besked
     setTimeout(() => {
       aiMessageBox = document.createElement("div");
       aiMessageBox.classList.add("message", "ai", "initial");
@@ -318,7 +372,6 @@
       checkInput();
     }, 500);
 
-    // Eksempel på funktioner for 'Skip spørgsmål' og 'Afslut'
     function skipQuestion() {
       console.log("Spørgsmål sprunget over.");
     }
